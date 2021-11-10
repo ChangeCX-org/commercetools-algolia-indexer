@@ -70,6 +70,7 @@ outputStream.on('finish', function(v) {
             const fileData = fs.readFileSync(path.join('./data', file));
             //if (fileData) {
             const products = JSON.parse(fileData.toString());
+           
             let env_languages = (process.env.LANGUAGES).split(',');
             let fproducts = [];
             let env_attributes = (process.env.VARIENT_ATTRIBUTES).split(',');
@@ -106,9 +107,10 @@ outputStream.on('finish', function(v) {
 
                         for (let attribute of variant.attributes) {
                             if (env_attributes.includes(attribute.name)) {
-                                product.variants[inc][attribute.name] = attribute.value.key;
-                                if (!product[attribute.name].includes(attribute.value.key))
-                                    product[attribute.name].push(attribute.value.key);
+                                product.variants[inc][attribute.name] = attribute.value.key || attribute.value;
+                                //console.log(env_attributes,attribute)
+                                if (!product[attribute.name].includes(attribute.value.key || attribute.value))
+                                    product[attribute.name].push(attribute.value.key || attribute.value);
                             }
                         }
                         inc++;
