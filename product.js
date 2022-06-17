@@ -71,6 +71,7 @@ outputStream.on("finish", function (v) {
       const fileData = fs.readFileSync(path.join("./data", file));
       if (fileData) {
         const products = JSON.parse(fileData.toString());
+
         for (let product of products) {
           product.variants.push(product.masterVariant);
           let sizes = [];
@@ -104,6 +105,7 @@ outputStream.on("finish", function (v) {
           for (let color of colors) {
             for (let size of sizes) {
               let resultData = {
+                objectID: varients.filter((x) => x.color == color)[0].sku,
                 type: types[0],
                 model: product.name.en,
                 color: color,
@@ -115,7 +117,10 @@ outputStream.on("finish", function (v) {
                 price: varients.filter((x) => x.color == color)[0].price,
                 slug: product.slug.en,
               };
-
+              // if (
+              //   finalproducts.filter((x) => x.model === resultData.model)
+              //     .length <= 0
+              // )
               finalproducts.push(resultData);
             }
           }
